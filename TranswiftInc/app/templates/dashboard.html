@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard | Transwift Inc.</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <!-- Add dashboard content and navigation here -->
+    <ul>
+        <li><a href="{% url 'route_planning' %}">Route Planning</a></li>
+        <li><a href="{% url 'vehicle_management' %}">Vehicle Management</a></li>
+        <li><a href="{% url 'driver_management' %}">Driver Management</a></li>
+        <li><a href="{% url 'delivery_tracking' %}">Delivery Tracking</a></li>
+        <!-- Add more links to other dashboard modules -->
+    </ul>
+</body>
+</html>
