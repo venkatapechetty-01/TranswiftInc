@@ -1,0 +1,47 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Route Planning | Transwift Inc.</title>
+</head>
+<body>
+    <h1>Route Planning</h1>
+    <form id="directions-form">
+        From Address: <input type="text" name="origin" id="origin">
+        Destination: <input type="text" name="destination" id="destination">
+        <button type="button" id="get-directions" value="Click">Get Directions</button>
+    </form>
+
+    <div id="directions-result"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#get-directions').on('click', function () {
+                var origin = $('#origin').val();
+                var destination = $('#destination').val();
+                $.ajax({
+                    url: 'https://maps.googleapis.com/maps/api/directions/json',
+                    data: {
+                        'origin': origin,
+                        'destination': destination,
+                        'key': 'AIzaSyAmDjTkOp-6002CzNM1m9ha7KNzGU36p_A',
+                    },
+                    success: function (data) {
+                        // Handle the response from the server (Google Maps API data)
+                        // You can display the data in 'directions-result' div or use it as needed
+                        console.log(data);
+                    },
+                    error: function (error) {
+                        console.log('Error occurred:', error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+{% endblock content %}

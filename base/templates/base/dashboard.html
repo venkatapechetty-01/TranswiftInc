@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard | Transwift Inc.</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <div class="card" style="width: 18rem;">
+        <img src="truckimage.png" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Transift Inc</h5>
+          <p class="card-text">This is a Logistics & Moving company </p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">User Profile</li>
+          <li class="list-group-item">Preferences</li>
+          <li class="list-group-item">Account Settings</li>
+          <li class="list-group-item">Contact</li>
+        </ul>
+        {% comment %} <div class="card-body">
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div> {% endcomment %}
+      </div>
+    <!-- Add dashboard content and navigation here -->
+
+</body>
+</html>
+
+{% endblock content %}

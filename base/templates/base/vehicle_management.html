@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vehicle Management | Transwift Inc.</title>
+</head>
+<body>
+    <h1>Vehicle Management</h1>
+    <div class="row">
+        <div class="col-4">
+          <div class="list-group" id="list-tab" role="tablist">
+            <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Add Vehicle</a>
+            <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Assign Vehicle</a>
+            <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" href="#list-settings" role="tab" aria-controls="list-settings">Remove Vehicle</a>
+          </div>
+        </div>
+        
+        </div>
+      </div>
+    <!-- Add Vehicle management table and actions here -->
+</body>
+</html>
+
+{% endblock content %}
