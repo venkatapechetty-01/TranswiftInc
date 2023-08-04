@@ -19,5 +19,6 @@ urlpatterns = [
     path('route_planning/', views.route_planning, name='route_planning'),
     path('driver_management/', views.driver_management, name='driver_management'),
     path('vehicle_management/', views.vehicle_management, name='vehicle_management'),
+    path('insertvehicle/', views.insertvehicle, name='insertVehicle'),
     path('delivery_tracking/', views.delivery_tracking, name='delivery_tracking'),
 ]

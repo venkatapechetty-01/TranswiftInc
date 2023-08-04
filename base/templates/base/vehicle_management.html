@@ -4,23 +4,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Vehicle Management | Transwift Inc.</title>
+  <h1>Vehicle Management</h1>
+  <div class="row">
+    <div class="col-4">
+      <div class="list-group" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile" onclick="openAddVehicle()">Add Vehicle</a>
+        <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Assign Vehicle</a>
+        <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" href="#list-settings" role="tab" aria-controls="list-settings">Remove Vehicle</a>
+      </div>
+    </div>
+
+    <div class="btn-toolbar justify-content-between">
+      <h2>Add Vehicle Details</h2>
+
+      <form id="vehicleForm" name = "addVehicle" method = "post" action = "../insertvehicle/" >
+
+        {% csrf_token %}
+
+        <label for="registrationnumber">RegistrationNumber:</label>
+          <input type="text" name="registrationnumber" required><br><br>
+          
+          <label for="make">Make:</label>
+          <input type="text" name="make" required><br><br>
+          
+          <label for="model">Model:</label>
+          <input type="text" name="model" required><br><br>
+          
+          <label for="capacity">Capacity:</label>
+          <input type="number" name="capacity" min="1900" max="2099" required><br><br>
+          
+          <button type="submit" id="addVehicle">Add Vehicle</button>
+      </form>
+
+  </div>
+    </div>
+  </div>
+    <br/>
+
+    <title>Add Vehicle Details</title>
+    <style>
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
-    <h1>Vehicle Management</h1>
-    <div class="row">
-        <div class="col-4">
-          <div class="list-group" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Add Vehicle</a>
-            <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Assign Vehicle</a>
-            <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" href="#list-settings" role="tab" aria-controls="list-settings">Remove Vehicle</a>
-          </div>
-        </div>
+{% comment %} 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const addVehicleButton = document.getElementById("addVehicle");
+    const vehicleForm = document.getElementById("vehicleForm");
+    
+    addVehicleButton.addEventListener("click", function() {
+        const make = document.getElementById("make").value;
+        const model = document.getElementById("model").value;
+        const year = document.getElementById("year").value;
         
-        </div>
-      </div>
-    <!-- Add Vehicle management table and actions here -->
-</body>
-</html>
+        // Create a new row in a table to display the added vehicle details
+        const vehicleTable = document.getElementById("vehicleTable");
+        const newRow = vehicleTable.insertRow();
+        
+        const makeCell = newRow.insertCell(0);
+        makeCell.textContent = make;
+        
+        const modelCell = newRow.insertCell(1);
+        modelCell.textContent = model;
+        
+        const yearCell = newRow.insertCell(2);
+        yearCell.textContent = year;
+        
+        // Clear the form inputs
+        vehicleForm.reset();
+    });
+});
+</script> {% endcomment %}
 
+</body>
+
+</html>
 {% endblock content %}

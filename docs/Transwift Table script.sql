@@ -23,7 +23,7 @@ CREATE TABLE dbo.[Users] (
 
 -- Vehicle Table
 CREATE TABLE dbo.[Vehicle] (
-    VehicleID INT PRIMARY KEY,
+    VehicleID INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
     RegistrationNumber NVARCHAR(50) NOT NULL,
     Make NVARCHAR(50),
     Model NVARCHAR(50),

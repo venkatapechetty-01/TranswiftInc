@@ -14,6 +14,14 @@ import json
 from django.http import JsonResponse
 
 
+# from database_checker import check_database_connection
+
+# def some_view(request):
+#     if check_database_connection():
+#         print("Connection successful")
+#     else:
+#         print("Connection unsuccessful")
+
 class CustomLoginView(LoginView):
     template_name = 'base/login.html'
     fields = '__all__'
@@ -27,7 +35,7 @@ class RegisterPage(FormView):
     template_name = 'base/register.html'
     form_class = UserCreationForm
     redirect_authenticated_user = True
-    success_url = reverse_lazy('task_list')
+    success_url = reverse_lazy('dashboard')
 
     def form_valid(self, form):
         user = form.save()
@@ -209,6 +217,17 @@ def shipment_list(request):
     }
     return render(request, 'shipment_list.html', context)
 
+def insertvehicle(request):
+    print("#########")
+    vregnumber = request.POST['registrationnumber'];
+    vmake = request.POST['make'];
+    vmodel = request.POST['model'];
+    vcapacity = request.POST['capacity'];
+    us = Vehicle(RegistrationNumber = vregnumber, Make = vmake, Model = vmodel, Capacity = vcapacity);
+    us.save();
+    print("#########")
+    return render(request, 'dashboard.html' , {})
+    
 
 
 
