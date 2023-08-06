@@ -12,6 +12,11 @@ from .models import Address, Assignment, Customer, DeliveryStatus, Driver, Order
 import urllib.request
 import json
 from django.http import JsonResponse
+from base.serializers import VehicleSerializer, DriverSerializer
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+from django.http.response import JsonResponse
+from rest_framework.parsers import JSONParser
 
 
 # from database_checker import check_database_connection
@@ -217,17 +222,70 @@ def shipment_list(request):
     }
     return render(request, 'shipment_list.html', context)
 
-def insertvehicle(request):
-    print("#########")
-    vregnumber = request.POST['registrationnumber'];
-    vmake = request.POST['make'];
-    vmodel = request.POST['model'];
-    vcapacity = request.POST['capacity'];
-    us = Vehicle(RegistrationNumber = vregnumber, Make = vmake, Model = vmodel, Capacity = vcapacity);
-    us.save();
-    print("#########")
-    return render(request, 'dashboard.html' , {})
+# def add_vehicle(request):
+#     print("*************")
+#     vregnumber = request.POST['registrationnumber'];
+#     vmake = request.POST['make'];
+#     vmodel = request.POST['model'];
+#     vcapacity = request.POST['capacity'];
+#     new_vehicle = Vehicle(RegistrationNumber = vregnumber, Make = vmake, Model = vmodel, Capacity = vcapacity);
+#     new_vehicle.save();
+#     print("#########")
+#     return render(request, 'dashboard.html' , {})
     
 
+def add_driver(request):
+    print("***********")
+    if request.method == 'POST':
+        driver_id = request.POST.get('driver_id', False)
+        driver_name = request.POST['drivername']
+        mobile_number = request.POST['mobilenumber']
+        license_number = request.POST['licensenumber']
+        salary = request.POST['salary']
+        
+        # Create a new Driver instance and save it to the database
+        new_driver = Driver(
+            DriverName=driver_name,
+            MobileNumber=mobile_number,
+            LicenseNumber=license_number,
+            Salary=salary
+        )
+        new_driver.save()
+        print("#########")
+        
+        
+        return render(request, 'dashboard.html', {})  # Replace 'dashboard.html' with your desired template
 
 
+@csrf_exempt
+def vehicleApi(request,vehicle_id=None):
+    print("APIIIIII")
+    #vehicle_data = JSONParser().parse(request.body)
+    print(">>>>>>>>", request)
+    if request.method=='GET':
+        vehicles = Vehicle.objects.all()
+        vehicle_serializer=VehicleSerializer(vehicles,many=True)
+        context = {'vehicledata': vehicle_serializer.data}
+        return JsonResponse(vehicle_serializer.data,safe=False)
+    elif request.method=='POST':
+        print("rrrrrr", request)
+        vehicle_data=JSONParser().parse(request)
+        vehicle_serializer=VehicleSerializer(data=vehicle_data)
+        if vehicle_serializer.is_valid():
+            vehicle_serializer.save()
+            return JsonResponse("Added Successfully",safe=False)
+        return JsonResponse("Failed to Add",safe=False)
+    elif request.method=='PUT':
+        vehicle_data=JSONParser().parse(request)
+        vehicle=Vehicle.objects.get(VehicleID=vehicle_data['VehicleID'])
+        vehicle_serializer=VehicleSerializer(vehicle,data=vehicle_data)
+        if vehicle_serializer.is_valid():
+            vehicle_serializer.save()
+            return JsonResponse("Updated Successfully",safe=False)
+        return JsonResponse("Failed to Update")
+    elif request.method=='DELETE':
+        print("vehhhhhhh", vehicle_id)
+        vehicle=Vehicle.objects.get(VehicleID = vehicle_id)
+        vehicle.delete()
+        return JsonResponse("Deleted Successfully",safe=False)
+    print("API EXITEDDDD")
