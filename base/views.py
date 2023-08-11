@@ -12,7 +12,7 @@ from .models import Address, Assignment, Customer, DeliveryStatus, Driver, Order
 import urllib.request
 import json
 from django.http import JsonResponse
-from base.serializers import VehicleSerializer, DriverSerializer
+from base.serializers import VehicleSerializer, DriverSerializer, AddressSerializer, RoleSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from django.http.response import JsonResponse
@@ -234,32 +234,32 @@ def shipment_list(request):
 #     return render(request, 'dashboard.html' , {})
     
 
-def add_driver(request):
-    print("***********")
-    if request.method == 'POST':
-        driver_id = request.POST.get('driver_id', False)
-        driver_name = request.POST['drivername']
-        mobile_number = request.POST['mobilenumber']
-        license_number = request.POST['licensenumber']
-        salary = request.POST['salary']
+# def add_driver(request):
+#     print("***********")
+#     if request.method == 'POST':
+#         driver_id = request.POST.get('driver_id', False)
+#         driver_name = request.POST['drivername']
+#         mobile_number = request.POST['mobilenumber']
+#         license_number = request.POST['licensenumber']
+#         salary = request.POST['salary']
         
-        # Create a new Driver instance and save it to the database
-        new_driver = Driver(
-            DriverName=driver_name,
-            MobileNumber=mobile_number,
-            LicenseNumber=license_number,
-            Salary=salary
-        )
-        new_driver.save()
-        print("#########")
+#         # Create a new Driver instance and save it to the database
+#         new_driver = Driver(
+#             DriverName=driver_name,
+#             MobileNumber=mobile_number,
+#             LicenseNumber=license_number,
+#             Salary=salary
+#         )
+#         new_driver.save()
+#         print("#########")
         
         
-        return render(request, 'dashboard.html', {})  # Replace 'dashboard.html' with your desired template
+        #return render(request, 'dashboard.html', {})  # Replace 'dashboard.html' with your desired template
 
 
 @csrf_exempt
 def vehicleApi(request,vehicle_id=None):
-    print("APIIIIII")
+    print("&&&&&&&&APIIIIII")
     #vehicle_data = JSONParser().parse(request.body)
     print(">>>>>>>>", request)
     if request.method=='GET':
@@ -268,7 +268,7 @@ def vehicleApi(request,vehicle_id=None):
         context = {'vehicledata': vehicle_serializer.data}
         return JsonResponse(vehicle_serializer.data,safe=False)
     elif request.method=='POST':
-        print("rrrrrr", request)
+        print("$$$$$$$$$$$$$", request)
         vehicle_data=JSONParser().parse(request)
         vehicle_serializer=VehicleSerializer(data=vehicle_data)
         if vehicle_serializer.is_valid():
@@ -288,4 +288,59 @@ def vehicleApi(request,vehicle_id=None):
         vehicle=Vehicle.objects.get(VehicleID = vehicle_id)
         vehicle.delete()
         return JsonResponse("Deleted Successfully",safe=False)
+    print("API EXITEDDDD")
+
+
+def driverApi(request, driver_id=None):
+    print("APIIIIII")
+    if request.method == 'GET':
+            drivers = Driver.objects.all()
+            driver_serializer = DriverSerializer(drivers, many=True)
+            return JsonResponse(driver_serializer.data, safe=False)
+    elif request.method == 'POST':
+            print("DRIVER POST:", )
+            data = json.loads(request.body)
+            driver_data = data['DriverData']
+            address_data = data['AddressData']
+            role_data = data['RoleData']
+            
+            
+            # Create Role first
+            role_serializer = RoleSerializer(data=role_data)
+            if role_serializer.is_valid():
+                role = role_serializer.save()
+            else:
+                return JsonResponse({'message': 'Failed to add role.'}, status=400)
+            
+            # Create Address
+            address_serializer = AddressSerializer(data=address_data)
+            if address_serializer.is_valid():
+                address = address_serializer.save()
+            else:
+                return JsonResponse({'message': 'Failed to add address.'}, status=400)
+            
+            # Set RoleID and AddressID in driver_data
+            driver_data['RoleID'] = role.RoleID
+            driver_data['AddressID'] = address.AddressID
+            driver_serializer = DriverSerializer(data=driver_data)
+            if driver_serializer.is_valid():
+                driver_serializer.save()
+            else:
+                return JsonResponse({'message': 'Failed to add driver.'}, status=400)
+            
+            return JsonResponse({'message': 'Driver added successfully.'})
+        
+            #return JsonResponse({'message': 'Invalid request method.'})
+    elif request.method == 'PUT':
+            driver_data = JSONParser().parse(request)
+            driver = Driver.objects.get(DriverID=driver_data['DriverID'])
+            driver_serializer = DriverSerializer(driver, data=driver_data)
+            if driver_serializer.is_valid():
+                driver_serializer.save()
+                return JsonResponse("Updated Successfully", safe=False)
+            return JsonResponse("Failed to Update")
+    elif request.method == 'DELETE':
+            driver = Driver.objects.get(DriverID=driver_id)
+            driver.delete()
+            return JsonResponse("Deleted Successfully", safe=False)
     print("API EXITEDDDD")

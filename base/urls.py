@@ -19,11 +19,12 @@ urlpatterns = [
     path('dashboard/', views.dashboardview, name='dashboard'),
     path('route_planning/', views.route_planning, name='route_planning'),
     path('driver_management/', views.driver_management, name='driver_management'),
-    path('add_driver/', views.add_driver, name='add_driver'),
+    #path('add_driver/', views.add_driver, name='add_driver'),
     path('vehicle_management/', views.vehicle_management, name='vehicle_management'),
     path('vehicle/insert/', views.vehicleApi, name='addVehicle'),
     path('delivery_tracking/', views.delivery_tracking, name='delivery_tracking'),
     #url(r'^vehicleApi$',views.vehicleApi, name='vehicleApi'),
     path('vehicle/', views.vehicleApi, name='vehicles'),
     path('vehicle/remove/<int:vehicle_id>/', views.vehicleApi, name='removeVehicle'),
+    path('driver/insert/', views.driverApi, name='addDriver'),
 ]

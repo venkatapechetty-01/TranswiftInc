@@ -17,8 +17,18 @@ class Task(models.Model):
 
 
 class Role(models.Model):
+    SUPERVISOR = 'Supervisor'
+    ADMIN = 'Admin'
+    DRIVER = 'Driver'
+    
+    ROLE_CHOICES = [
+        (SUPERVISOR, 'Supervisor'),
+        (ADMIN, 'Admin'),
+        (DRIVER, 'Driver'),
+    ]
+
     RoleID = models.AutoField(primary_key=True)
-    RoleName = models.CharField(max_length=50)
+    RoleName = models.CharField(max_length=50, choices=ROLE_CHOICES)
 
     def __str__(self):
         return self.RoleName
@@ -109,8 +119,8 @@ class Route(models.Model):
     
 class Driver(models.Model):
     DriverID = models.AutoField(primary_key=True)
-    RoleID = models.ForeignKey('Role', on_delete=models.CASCADE)
-    AddressID = models.ForeignKey('Address', on_delete=models.CASCADE)
+   # RoleID = models.ForeignKey('Role', on_delete=models.CASCADE)
+    #AddressID = models.ForeignKey('Address', on_delete=models.CASCADE)
     DriverName = models.CharField(max_length=100)
     MobileNumber = models.CharField(max_length=20)
     LicenseNumber = models.CharField(max_length=50)
