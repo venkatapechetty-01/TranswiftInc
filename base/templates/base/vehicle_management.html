@@ -1,5 +1,4 @@
 {% extends 'base/base.html' %}
-
 {% block content %}
 <!DOCTYPE html>
 <html>
@@ -41,7 +40,6 @@
                                         RegistrationNumber: $("#registrationNumberID").val(),
                                         Capacity: $("#capacityID").val()
                                     };
-                                    console.log("^^^^^^", formData);
                                     $.ajax({
                                         url:'/vehicle/insert/',
                                         type:'POST', 
@@ -56,7 +54,6 @@
                                 });
                             });
                         </script>
-
                     </form>
                 </div>
                 <div class="tab-pane fade" id="list-assign-vehicle-content" role="tabpanel" aria-labelledby="list-assign-vehicle">
@@ -67,13 +64,11 @@
                         <select name="vehicle" required>
                             <option value="vehicle1">Vehicle 1</option>
                             <option value="vehicle2">Vehicle 2</option>
-                            <!-- Add more options as needed -->
                         </select><br><br>
                         <label for="driver">Select Driver:</label>
                         <select name="driver" required>
                             <option value="driver1">Driver 1</option>
                             <option value="driver2">Driver 2</option>
-                            <!-- Add more options as needed -->
                         </select><br><br>
                         <button type="submit">Assign Vehicle</button>
                     </form>
@@ -83,15 +78,12 @@
                     <div>
                         <h3>Select Vehicle to Remove:</h3>
                         <select id="removeVehicleSelect" required>
-                            <!-- Options will be populated dynamically -->
                         </select>
                         <button id="removeVehicleButton" type="button">Remove Vehicle</button>
                     </div>
                 </div>
-                
                 <script>
                     $(document).ready(function() {
-                        // Populate the select element with vehicles using a GET request
                         $.get('/vehicle/', function(data) {
                             var selectElement = $("#removeVehicleSelect");
                             $.each(data, function(index, item) {
@@ -99,15 +91,12 @@
                                 selectElement.append(option);
                             });
                         });
-                
-                        // Handle the remove vehicle button click event
                         $("#removeVehicleButton").click(function() {
                             var selectedVehicleID = $("#removeVehicleSelect").val();
                             var formData = {
                                 VehicleID: $("#removeVehicleSelect").val(),
                             };
                             if (selectedVehicleID) {
-                                console.log(":::::::", selectedVehicleID);
                                 $.ajax({
                                     url: '/vehicle/remove/' + $("#removeVehicleSelect").val() + '/',
                                     type: 'DELETE',
@@ -154,7 +143,6 @@
                                                 tableBody.empty();
                                                 $("viewVehicleForm").text(data.message);
                                                 var apiData = data;
-                                                console.log("^^^^^^^^^^^", apiData);
                                                 var rows = '';
                                                 $.each(data, function(index, item) {
                                                     var row = $("<tr>");

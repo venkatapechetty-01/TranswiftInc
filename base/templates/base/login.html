@@ -1,11 +1,8 @@
 {% extends 'base/main.html' %}
-
 {% block content %}
-
 <div class="header-bar">
   <h1>Login</h1>
 </div>
-
 <div class="card-body">
   <form method="POST">
     {% csrf_token %}
@@ -17,5 +14,4 @@
   </form>
   <p>Don't have an account? <a href="{%url 'base:register'%}">Register</a> </p>
 </div>
-
 {% endblock content %}  

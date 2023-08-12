@@ -4,7 +4,6 @@
 <html>
 <head>
   <title>Driver Management</title>
-  <!-- Include necessary Bootstrap CSS and JavaScript files here -->
 </head>
 <body>
   <h1>Driver Management</h1>
@@ -19,9 +18,7 @@
         <a class="list-group-item list-group-item-action viewdivertable" id="list-view-driver" data-bs-toggle="list" href="#list-view-driver-content" role="tab" aria-controls="list-view-driver-content">View Drivers</a>
       </div>
     </div>
-
     <div class="col-8">
-      <!-- Add Driver Tab Content -->
       <div class="tab-pane fade" id="list-add-driver-content" role="tabpanel" aria-labelledby="list-add-driver">
         <h2 id="addDriverTitle" style="display: none;">Enter Driver Details</h2>
         <form id="addDriverForm" name="addDrivers" style="display: none;">
@@ -41,7 +38,6 @@
                 <input id="Country" type="text" name="Country" required><br><br>
             </div>
             <div class="col-md-6">
-
                 <label for="DriverName">DriverName:</label>
                 <input id="drivernameid" type="text" name="drivername" required><br><br>
                 <label for="MobileNumber">MobileNumber:</label>
@@ -59,7 +55,6 @@
         <script>
             $(document).ready(function() {
                 $("#addDriver").click(function() {
-                    console.log("HEEEEEEEEEEE",);
                     var DriverData = {
                         DriverName: $("#drivernameid").val(),
                         MobileNumber: $("#mobileid").val(),
@@ -73,9 +68,8 @@
                         ZIPCode: $("#ZIPCode").val(),
                         Country: $("#Country").val()
                     };
-
                     $.ajax({
-                        url: '/driver/insert/',  // Replace with your API endpoint
+                        url: '/driver/insert/',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify({
@@ -88,7 +82,6 @@
                         dataType: 'json',
                             success: function(response) {
                             $("#responseMessage").text(response.message);
-                            // Clear form fields if needed
                         },
                         error: function(error) {
                             $("#responseMessage").text('Failed to add driver.');
@@ -97,39 +90,26 @@
                 });
             });
         </script>
-   
-
-
-      <!-- Assign Driver Tab Content -->
       <div class="tab-pane fade" id="list-assign-driver-content" role="tabpanel" aria-labelledby="list-assign-driver">
         <h2 id="assignDriverTitle" style="display: none;">Assign Driver</h2>
         <form id="assignDriverForm" name="assignDriver" method="post" action="../assigndriver/" style="display: none;">
           {% csrf_token %}
           <label for="driverid_assign">DriverID:</label>
           <input type="number" name="driverid_assign" required><br><br>
-          
-          <!-- Add additional fields for assigning driver -->
-          <!-- For example: Vehicle ID, Assignment Date, etc. -->
-          
           <button type="submit" id="assignDriver">Assign Driver</button>
         </form>
       </div>
-
-      <!-- Remove Driver Tab Content -->
       <div class="tab-pane fade" id="list-remove-driver-content" role="tabpanel" aria-labelledby="list-remove-driver">
         <h2>Remove Driver</h2>
         <div>
             <h3>Select Driver to Remove:</h3>
             <select id="removeDriverSelect" required>
-                <!-- Options will be populated dynamically -->
             </select>
             <button id="removeDriverButton" type="button">Remove Driver</button>
         </div>
     </div>
-
       <script>
         $(document).ready(function() {
-            // Populate the select element with vehicles using a GET request
             $.get('/driver/', function(data) {
                 var selectElement = $("#removeDriverSelect");
                 $.each(data, function(index, item) {
@@ -137,15 +117,12 @@
                     selectElement.append(option);
                 });
             });
-    
-            // Handle the remove vehicle button click event
             $("#removeDriverButton").click(function() {
                 var selectedDriverID = $("#removeDriverSelect").val();
                 var formData = {
                     DriverID: $("#removeDriverSelect").val(),
                 };
                 if (selectedDriverID) {
-                    console.log(":::::::", selectedDriverID);
                     $.ajax({
                         url: '/driver/remove/' + $("#removeDriverSelect").val() + '/',
                         type: 'DELETE',
@@ -167,21 +144,14 @@
             });
         });
     </script>
-
-      <!-- Include Driver Profile Tab Content here -->
     </div>
   </div>
-
   <script>
     function openTab(tabName) {
       const tabTitle = document.getElementById(`${tabName}Title`);
       const tabForm = document.getElementById(`${tabName}Form`);
-
-      // Display the tab content title and form
       tabTitle.style.display = "block";
       tabForm.style.display = "block";
-
-      // Hide other tab content titles and forms
       const otherTabs = ['addDriver', 'assignDriver', 'removeDriver'];
       otherTabs.forEach(otherTab => {
         if (otherTab !== tabName) {
@@ -233,7 +203,6 @@
             </tbody>
         </table>
     </form>
-
 </body>
 </html>
 {% endblock content %}
