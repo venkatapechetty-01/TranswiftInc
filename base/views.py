@@ -1,3 +1,4 @@
+
 from django import forms
 from django.shortcuts import redirect, render
 from django.views.generic.list import ListView
@@ -304,63 +305,35 @@ def driverApi(request, driver_id=None):
             return JsonResponse(driver_serializer.data, safe=False)
         
     elif request.method == 'POST':
-        driver_data = JSONParser().parse(request)
-        print("IIIIII",driver_data)
-       
-        driver_info = driver_data.get('DriverData')
-        print("JJJJJJ",driver_info )
-        address_data = driver_data.pop('AddressData')
-        print("kkkkk",address_data )
-       
-
-        driver_serializer = DriverSerializer(data=driver_info)
-        print("LLLLLLLLLL",address_data )
-        if driver_serializer.is_valid():
-         driver_instance = driver_serializer.save()
-         print("MMMMMMMMMMMM",driver_instance )
-         print("NNNNNNNNN", address_data)
-
+        data = json.loads(request.body)
+        print('data')
+        print(data)
+        driver_data = data['DriverData']
+        address_data = data['AddressData']
+        print(address_data)
+        # Create Address
         address_serializer = AddressSerializer(data=address_data)
+        print('validity')
+        print(address_serializer.is_valid())
         if address_serializer.is_valid():
-            address_serializer.save()
-            return JsonResponse("Added Successfully",safe=False)
+            address = address_serializer.save()
+            driver_data['AddressID'] = address.AddressID
+            driver_serializer = DriverSerializer(data=driver_data)
+            if driver_serializer.is_valid():
+                driver_serializer.save()
+                return JsonResponse({'message': 'Driver added successfully.'})
+            else:
+                print("Driver Validation Errors:", driver_serializer.errors)
+                return JsonResponse({'message': 'Failed to add driver.'}, status=400)
+
+        else:
+            print("Address Validation Errors:", address_serializer.errors)
+            return JsonResponse({'message': 'Failed to add address.'}, status=400)
+
+        # Attach the address ID to the driver data
+        #driver_data['AddressID'] = address.AddressID
             
-        return JsonResponse("Failed to Add",safe=False)
-        
-    # driver_data=JSONParser().parse(request)
-    # print("AAAAAAAAAAAAAAAA",driver_data)
-    # driver_serializer=DriverSerializer(data=driver_data)
-    # address_data=JSONParser().parse(request)
-    # address_serializer=AddressSerializer(data=address_data)
-    
-    # if driver_serializer.is_valid() and address_serializer.is_valid():
-    #     driver_serializer.save()
-    #     address_serializer.save()
-    #     return JsonResponse("Added Successfully",safe=False)
-    # print("API EXITEDDDD")
-    #return JsonResponse("Failed to Add",safe=False)
-    # elif request.method == 'POST':
-    #         print("DRIVER POST:", )
-    #         data = json.loads(request.body)
-    #         driver_data = data['DriverData']
-    #         address_data = data['AddressData']
-            
-    #         # Create Address
-    #         address_serializer = AddressSerializer(data=address_data)
-    #         if address_serializer.is_valid():
-    #             address = address_serializer.save()
-    #         else:
-    #             return JsonResponse({'message': 'Failed to add address.'}, status=400)
-            
-    #         # Set RoleID and AddressID in driver_data
-    #         driver_data['AddressID'] = address.AddressID
-    #         driver_serializer = DriverSerializer(data=driver_data)
-    #         if driver_serializer.is_valid():
-    #             driver_serializer.save()
-    #         else:
-    #             return JsonResponse({'message': 'Failed to add driver.'}, status=400)
-            
-    #         return JsonResponse({'message': 'Driver added successfully.'})
+        return JsonResponse({'message': 'Invalid request method.'}, status=405)
         
     #         #return JsonResponse({'message': 'Invalid request method.'})
     elif request.method == 'PUT':
