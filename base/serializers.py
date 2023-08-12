@@ -9,7 +9,7 @@ class VehicleSerializer(serializers.ModelSerializer):
 class DriverSerializer(serializers.ModelSerializer):
     class Meta:
         model=Driver 
-        fields=('DriverID','RoleID','AddressID','DriverName','MobileNumber', 'LicenseNumber', 'Salary')
+        fields=('DriverID', 'DriverName','MobileNumber', 'LicenseNumber', 'Salary')
         
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:

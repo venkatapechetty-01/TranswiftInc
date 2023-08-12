@@ -290,47 +290,69 @@ def vehicleApi(request,vehicle_id=None):
         return JsonResponse("Deleted Successfully",safe=False)
     print("API EXITEDDDD")
 
-
+@csrf_exempt
 def driverApi(request, driver_id=None):
     print("APIIIIII")
     if request.method == 'GET':
             drivers = Driver.objects.all()
             driver_serializer = DriverSerializer(drivers, many=True)
             return JsonResponse(driver_serializer.data, safe=False)
-    elif request.method == 'POST':
-            print("DRIVER POST:", )
-            data = json.loads(request.body)
-            driver_data = data['DriverData']
-            address_data = data['AddressData']
-            role_data = data['RoleData']
-            
-            
-            # Create Role first
-            role_serializer = RoleSerializer(data=role_data)
-            if role_serializer.is_valid():
-                role = role_serializer.save()
-            else:
-                return JsonResponse({'message': 'Failed to add role.'}, status=400)
-            
-            # Create Address
-            address_serializer = AddressSerializer(data=address_data)
-            if address_serializer.is_valid():
-                address = address_serializer.save()
-            else:
-                return JsonResponse({'message': 'Failed to add address.'}, status=400)
-            
-            # Set RoleID and AddressID in driver_data
-            driver_data['RoleID'] = role.RoleID
-            driver_data['AddressID'] = address.AddressID
-            driver_serializer = DriverSerializer(data=driver_data)
-            if driver_serializer.is_valid():
-                driver_serializer.save()
-            else:
-                return JsonResponse({'message': 'Failed to add driver.'}, status=400)
-            
-            return JsonResponse({'message': 'Driver added successfully.'})
         
-            #return JsonResponse({'message': 'Invalid request method.'})
+    elif request.method == 'POST':
+        driver_data = JSONParser().parse(request)
+        driver_info = driver_data.get('DriverData', {})
+        address_info = driver_data.get('AddressData', {})
+
+        address_serializer = AddressSerializer(data=address_info)
+        if address_serializer.is_valid():
+            address_instance = address_serializer.save()
+
+            driver_serializer = DriverSerializer(data=driver_info)
+            if driver_serializer.is_valid():
+                driver_serializer.save(Address=address_instance)
+                return JsonResponse({"message": "Driver and Address added successfully."}, status=201)
+            else:
+                address_instance.delete()
+                return JsonResponse(driver_serializer.errors, status=400)
+
+        return JsonResponse(address_serializer.errors, status=400)
+        
+    # driver_data=JSONParser().parse(request)
+    # print("AAAAAAAAAAAAAAAA",driver_data)
+    # driver_serializer=DriverSerializer(data=driver_data)
+    # address_data=JSONParser().parse(request)
+    # address_serializer=AddressSerializer(data=address_data)
+    
+    # if driver_serializer.is_valid() and address_serializer.is_valid():
+    #     driver_serializer.save()
+    #     address_serializer.save()
+    #     return JsonResponse("Added Successfully",safe=False)
+    # print("API EXITEDDDD")
+    #return JsonResponse("Failed to Add",safe=False)
+    # elif request.method == 'POST':
+    #         print("DRIVER POST:", )
+    #         data = json.loads(request.body)
+    #         driver_data = data['DriverData']
+    #         address_data = data['AddressData']
+            
+    #         # Create Address
+    #         address_serializer = AddressSerializer(data=address_data)
+    #         if address_serializer.is_valid():
+    #             address = address_serializer.save()
+    #         else:
+    #             return JsonResponse({'message': 'Failed to add address.'}, status=400)
+            
+    #         # Set RoleID and AddressID in driver_data
+    #         driver_data['AddressID'] = address.AddressID
+    #         driver_serializer = DriverSerializer(data=driver_data)
+    #         if driver_serializer.is_valid():
+    #             driver_serializer.save()
+    #         else:
+    #             return JsonResponse({'message': 'Failed to add driver.'}, status=400)
+            
+    #         return JsonResponse({'message': 'Driver added successfully.'})
+        
+    #         #return JsonResponse({'message': 'Invalid request method.'})
     elif request.method == 'PUT':
             driver_data = JSONParser().parse(request)
             driver = Driver.objects.get(DriverID=driver_data['DriverID'])

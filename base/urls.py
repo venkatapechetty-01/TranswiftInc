@@ -25,6 +25,7 @@ urlpatterns = [
     path('delivery_tracking/', views.delivery_tracking, name='delivery_tracking'),
     #url(r'^vehicleApi$',views.vehicleApi, name='vehicleApi'),
     path('vehicle/', views.vehicleApi, name='vehicles'),
+     path('driver/', views.driverApi, name='drivers'),
     path('vehicle/remove/<int:vehicle_id>/', views.vehicleApi, name='removeVehicle'),
     path('driver/insert/', views.driverApi, name='addDriver'),
 ]

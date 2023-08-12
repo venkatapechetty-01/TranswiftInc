@@ -17,7 +17,7 @@
         <a class="list-group-item list-group-item-action" id="list-assign-driver-list" data-bs-toggle="list" href="#list-assign-driver-content" role="tab" aria-controls="list-assign-driver" onclick="openTab('assignDriver')">Assign Driver</a>
         <a class="list-group-item list-group-item-action" id="list-remove-driver-list" data-bs-toggle="list" href="#list-remove-driver-content" role="tab" aria-controls="list-remove-driver" onclick="openTab('removeDriver')">Remove Driver</a>
         <a class="list-group-item list-group-item-action" id="list-driver-profile-list" data-bs-toggle="list" href="#list-driver-profile-content" role="tab" aria-controls="list-driver-profile">Driver Profile</a>
-        <a class="list-group-item list-group-item-action viewtable" id="list-view-driver" data-bs-toggle="list" href="#list-view-driver-content" role="tab" aria-controls="list-view-driver-content">View Drivers</a>
+        <a class="list-group-item list-group-item-action viewdivertable" id="list-view-driver" data-bs-toggle="list" href="#list-view-driver-content" role="tab" aria-controls="list-view-driver-content">View Drivers</a>
       </div>
     </div>
 
@@ -25,30 +25,23 @@
       <!-- Add Driver Tab Content -->
       <div class="tab-pane fade" id="list-add-driver-content" role="tabpanel" aria-labelledby="list-add-driver">
         <h2 id="addDriverTitle" style="display: none;">Enter Driver Details</h2>
-        <form id="addDriverForm" name="addDriver" style="display: none;">
+        <form id="addDriverForm" name="addDrivers" style="display: none;">
           {% csrf_token %}
         <div class="row">
             <div class="col-md-6">
                 <h3>Address Details</h3>
                 <label for="address-street">Street:</label>
-                <input type="text" name="address-street" required><br><br>
+                <input id="streetid" type="text" name="address-street" required><br><br>
                 <label for="address-city">City:</label>
-                <input type="text" name="address-city" required><br><br>
+                <input id="cityid" type="text" name="address-city" required><br><br>
                 <label for="address-province">Province:</label>
-                <input type="text" name="address-province" required><br><br>
+                <input id="provinceid" type="text" name="address-province" required><br><br>
                 <label for="address-zipcode">ZipCode:</label>
-                <input type="text" name="address-zipcode" required><br><br>
+                <input id="zipcodeid" type="text" name="address-zipcode" required><br><br>
                 <label for="address-country">Country:</label>
-                <input type="text" name="address-country" required><br><br>
+                <input id="countryid" type="text" name="address-country" required><br><br>
             </div>
             <div class="col-md-6">
-
-                {% comment %} <label for="roleid">Role:</label>
-                <select name="roleid" required>
-                    <option value="admin">Admin</option>
-                    <option value="supervisor">Supervisor</option>
-                    <option value="driver">Driver</option>
-                </select><br><br> {% endcomment %}
 
                 <label for="drivername">DriverName:</label>
                 <input type="text" name="drivername" required><br><br>
@@ -58,25 +51,22 @@
                 <input type="text" name="licensenumber" required><br><br>
                 <label for="salary">Salary:</label>
                 <input type="number" name="salary" required><br><br>
-                <button type="submit" id="addDriver">Add Driver</button>
+                <button id="addDriver" type="button">Add Driver</button>
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             $(document).ready(function() {
+
                 $("#addDriver").click(function() {
                   console.log("HEEEEEEEEEEE",);
                     var addressData = {
-                        Street: $("input[name='street']").val(),
-                        City: $("input[name='city']").val(),
-                        Province: $("input[name='province']").val(),
-                        Country: $("input[name='country']").val(),
-                        ZipCode: $("input[name='zipcode']").val()
+                        Street: $("#streetid").val(),
+                        City: $("#cityid").val(),
+                        Province: $("#provinceid").val(),
+                        Country: $("#countryid").val(),
+                        ZipCode: $("#zipcodeid").val()
                     };
-                    
-                    {% comment %} var roleData = {
-                        RoleName: $("select[name='role']").val()
-                    }; {% endcomment %}
 
                     var driverData = {
                       DriverName: $("input[name='drivername']").val(),
@@ -89,17 +79,16 @@
                     {% comment %} console.log("Roleee", roleData) {% endcomment %}
                     // Send driver, address, and role data to the backend
                     $.ajax({
-                        url: 'driver/insert/',
+                        url: '/driver/insert/',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify({
                             DriverData: driverData,
                             AddressData: addressData,
-                            {% comment %} RoleData: roleData {% endcomment %}
                         }),
                         dataType: 'json',
-                        success: function(response) {
-                            alert(response.message);
+                        success: function(data) {
+                            alert(data.message);
                         },
                         error: function(error) {
                             alert('Failed to add driver.');
@@ -185,7 +174,7 @@
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                 <script>
                     $(document).ready(function() {
-                        $(".view-driver-table").click(function() {
+                        $(".viewdivertable").click(function() {
                             $.get('/driver/', function(data) {
                                 var tableBody = $("#driver-response-table tbody");
                                 tableBody.empty();
