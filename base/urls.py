@@ -25,7 +25,10 @@ urlpatterns = [
     path('delivery_tracking/', views.delivery_tracking, name='delivery_tracking'),
     #url(r'^vehicleApi$',views.vehicleApi, name='vehicleApi'),
     path('vehicle/', views.vehicleApi, name='vehicles'),
-     path('driver/', views.driverApi, name='drivers'),
+    path('driver/', views.driverApi, name='drivers'),
     path('vehicle/remove/<int:vehicle_id>/', views.vehicleApi, name='removeVehicle'),
+    path('address/insert/', views.driverApi, name='addAddress'),
     path('driver/insert/', views.driverApi, name='addDriver'),
+    path('driver/remove/<int:driver_id>/', views.driverApi, name='removeDriver'),
+
 ]

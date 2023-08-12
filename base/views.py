@@ -306,15 +306,17 @@ def driverApi(request, driver_id=None):
         
     elif request.method == 'POST':
         data = json.loads(request.body)
-        print('data')
+        print('data############')
         print(data)
         driver_data = data['DriverData']
+        print('AAAAAAAAAA',  driver_data)
         address_data = data['AddressData']
-        print(address_data)
+        print('BBBBBBBBBBBBB',  address_data)
         # Create Address
         address_serializer = AddressSerializer(data=address_data)
         print('validity')
         print(address_serializer.is_valid())
+        print('CCCCCCCCCCC',  address_serializer)
         if address_serializer.is_valid():
             address = address_serializer.save()
             driver_data['AddressID'] = address.AddressID
