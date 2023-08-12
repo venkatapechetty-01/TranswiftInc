@@ -4,209 +4,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Driver Management</title>
-  <!-- Include necessary Bootstrap CSS and JavaScript files here -->
+    <title>Add Driver</title>
 </head>
 <body>
-  <h1>Driver Management</h1>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <div class="row">
-    <div class="col-4">
-      <div class="list-group" id="list-tab" role="tablist">
-        <a class="list-group-item list-group-item-action" id="list-add-driver-list" data-bs-toggle="list" href="#list-add-driver-content" role="tab" aria-controls="list-add-driver" onclick="openTab('addDriver')">Add Driver</a>
-        <a class="list-group-item list-group-item-action" id="list-assign-driver-list" data-bs-toggle="list" href="#list-assign-driver-content" role="tab" aria-controls="list-assign-driver" onclick="openTab('assignDriver')">Assign Driver</a>
-        <a class="list-group-item list-group-item-action" id="list-remove-driver-list" data-bs-toggle="list" href="#list-remove-driver-content" role="tab" aria-controls="list-remove-driver" onclick="openTab('removeDriver')">Remove Driver</a>
-        <a class="list-group-item list-group-item-action" id="list-driver-profile-list" data-bs-toggle="list" href="#list-driver-profile-content" role="tab" aria-controls="list-driver-profile">Driver Profile</a>
-        <a class="list-group-item list-group-item-action viewtable" id="list-view-driver" data-bs-toggle="list" href="#list-view-driver-content" role="tab" aria-controls="list-view-driver-content">View Drivers</a>
-      </div>
-    </div>
+    <h1>Add Driver</h1>
+    <form id="addDriverForm">
+        {% csrf_token %}
+        <h2>Driver Information</h2>
+        <label for="DriverName">Driver Name:</label>
+        <input type="text" id="DriverName" name="DriverName" required><br><br>
+        <label for="MobileNumber">Mobile Number:</label>
+        <input type="text" id="MobileNumber" name="MobileNumber" required><br><br>
+        <label for="LicenseNumber">License Number:</label>
+        <input type="text" id="LicenseNumber" name="LicenseNumber" required><br><br>
+        <label for="Salary">Salary:</label>
+        <input type="number" id="Salary" name="Salary" required><br><br>
 
-    <div class="col-8">
-      <!-- Add Driver Tab Content -->
-      <div class="tab-pane fade" id="list-add-driver-content" role="tabpanel" aria-labelledby="list-add-driver">
-        <h2 id="addDriverTitle" style="display: none;">Enter Driver Details</h2>
-        <form id="addDriverForm" name="addDriver" style="display: none;">
-          {% csrf_token %}
-        <div class="row">
-            <div class="col-md-6">
-                <h3>Address Details</h3>
-                <label for="address-street">Street:</label>
-                <input type="text" name="address-street" required><br><br>
-                <label for="address-city">City:</label>
-                <input type="text" name="address-city" required><br><br>
-                <label for="address-province">Province:</label>
-                <input type="text" name="address-province" required><br><br>
-                <label for="address-zipcode">ZipCode:</label>
-                <input type="text" name="address-zipcode" required><br><br>
-                <label for="address-country">Country:</label>
-                <input type="text" name="address-country" required><br><br>
-            </div>
-            <div class="col-md-6">
+        <h2>Address Information</h2>
+        <label for="Street">Street:</label>
+        <input type="text" id="Street" name="Street" required><br><br>
+        <label for="City">City:</label>
+        <input type="text" id="City" name="City" required><br><br>
+        <label for="Province">Province:</label>
+        <input type="text" id="Province" name="Province" required><br><br>
+        <label for="ZIPCode">ZIP Code:</label>
+        <input type="text" id="ZIPCode" name="ZIPCode" required><br><br>
+        <label for="Country">Country:</label>
+        <input type="text" id="Country" name="Country" required><br><br>
 
-                {% comment %} <label for="roleid">Role:</label>
-                <select name="roleid" required>
-                    <option value="admin">Admin</option>
-                    <option value="supervisor">Supervisor</option>
-                    <option value="driver">Driver</option>
-                </select><br><br> {% endcomment %}
+        <button type="button" id="submitDriver">Submit</button>
+    </form>
 
-                <label for="drivername">DriverName:</label>
-                <input type="text" name="drivername" required><br><br>
-                <label for="mobilenumber">MobileNumber:</label>
-                <input type="text" name="mobilenumber" required><br><br>
-                <label for="licensenumber">LicenseNumber:</label>
-                <input type="text" name="licensenumber" required><br><br>
-                <label for="salary">Salary:</label>
-                <input type="number" name="salary" required><br><br>
-                <button type="submit" id="addDriver">Add Driver</button>
-            </div>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $("#addDriver").click(function() {
-                  console.log("HEEEEEEEEEEE",);
-                    var addressData = {
-                        Street: $("input[name='street']").val(),
-                        City: $("input[name='city']").val(),
-                        Province: $("input[name='province']").val(),
-                        Country: $("input[name='country']").val(),
-                        ZipCode: $("input[name='zipcode']").val()
-                    };
-                    
-                    {% comment %} var roleData = {
-                        RoleName: $("select[name='role']").val()
-                    }; {% endcomment %}
+    <div id="responseMessage"></div>
 
-                    var driverData = {
-                      DriverName: $("input[name='drivername']").val(),
-                      LicenseNumber: $("input[name='licensenumber']").val(),
-                      Salary: $("input[name='salary']").val(),
-                      MobileNumber: $("input[name='mobilenumber']").val()
-                  };
-                    
-                    console.log("ADDRESSSS", addressData)
-                    {% comment %} console.log("Roleee", roleData) {% endcomment %}
-                    // Send driver, address, and role data to the backend
-                    $.ajax({
-                        url: 'driver/insert/',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            DriverData: driverData,
-                            AddressData: addressData,
-                            {% comment %} RoleData: roleData {% endcomment %}
-                        }),
-                        dataType: 'json',
-                        success: function(response) {
-                            alert(response.message);
-                        },
-                        error: function(error) {
-                            alert('Failed to add driver.');
-                        }
-                    });
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#submitDriver").click(function() {
+                var DriverData = {
+                    DriverName: $("#DriverName").val(),
+                    MobileNumber: $("#MobileNumber").val(),
+                    LicenseNumber: $("#LicenseNumber").val(),
+                    Salary: $("#Salary").val()
+                };
+
+                var AddressData = {
+                    Street: $("#Street").val(),
+                    City: $("#City").val(),
+                    Province: $("#Province").val(),
+                    ZIPCode: $("#ZIPCode").val(),
+                    Country: $("#Country").val()
+                };
+
+                $.ajax({
+                    url: '/driver/insert/',  // Replace with your API endpoint
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        DriverData: DriverData,
+                        AddressData: AddressData
+                    }),
+                    headers: {
+                          "X-CSRFToken": $("input[name='csrfmiddlewaretoken']").val(),
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        $("#responseMessage").text(response.message);
+                        // Clear form fields if needed
+                    },
+                    error: function(error) {
+                        $("#responseMessage").text('Failed to add driver.');
+                    }
                 });
             });
-        </script>
-    </form>
-</div>
-
-      <!-- Assign Driver Tab Content -->
-      <div class="tab-pane fade" id="list-assign-driver-content" role="tabpanel" aria-labelledby="list-assign-driver">
-        <h2 id="assignDriverTitle" style="display: none;">Assign Driver</h2>
-        <form id="assignDriverForm" name="assignDriver" method="post" action="../assigndriver/" style="display: none;">
-          {% csrf_token %}
-          <label for="driverid_assign">DriverID:</label>
-          <input type="number" name="driverid_assign" required><br><br>
-          
-          <!-- Add additional fields for assigning driver -->
-          <!-- For example: Vehicle ID, Assignment Date, etc. -->
-          
-          <button type="submit" id="assignDriver">Assign Driver</button>
-        </form>
-      </div>
-
-      <!-- Remove Driver Tab Content -->
-      <div class="tab-pane fade" id="list-remove-driver-content" role="tabpanel" aria-labelledby="list-remove-driver">
-        <h2 id="removeDriverTitle" style="display: none;">Remove Driver</h2>
-        <form id="removeDriverForm" name="removeDriver" method="post" action="../removedriver/" style="display: none;">
-          {% csrf_token %}
-          <label for="driverid_remove">DriverID:</label>
-          <input type="number" name="driverid_remove" required><br><br>
-          
-          <!-- Add additional fields for removing driver -->
-          <!-- For example: Confirmation, Reason, etc. -->
-          
-          <button type="submit" id="removeDriver">Remove Driver</button>
-        </form>
-      </div>
-
-      <!-- Include Driver Profile Tab Content here -->
-    </div>
-  </div>
-
-  <script>
-    function openTab(tabName) {
-      const tabTitle = document.getElementById(`${tabName}Title`);
-      const tabForm = document.getElementById(`${tabName}Form`);
-
-      // Display the tab content title and form
-      tabTitle.style.display = "block";
-      tabForm.style.display = "block";
-
-      // Hide other tab content titles and forms
-      const otherTabs = ['addDriver', 'assignDriver', 'removeDriver'];
-      otherTabs.forEach(otherTab => {
-        if (otherTab !== tabName) {
-          const otherTabTitle = document.getElementById(`${otherTab}Title`);
-          const otherTabForm = document.getElementById(`${otherTab}Form`);
-          otherTabTitle.style.display = "none";
-          otherTabForm.style.display = "none";
-        }
-      });
-    }
-  </script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <div class="tab-pane fade" id="list-view-driver-content" role="tabpanel" aria-labelledby="list-view-driver">
-    <h2>Driver List</h2>
-    <form id="viewDriverForm" name="viewDriver" method="get" action="driverApi">
-        {% csrf_token %}
-        <table class="table table-dark table-hover" id="driver-response-table">
-            <thead>
-                <tr>
-                    <th scope="col">DriverID</th>
-                    <th scope="col">DriverName</th>
-                    <th scope="col">LicenseNumber</th>
-                    <th scope="col">MobileNumber</th>
-                </tr>
-            </thead>
-            <tbody>
-                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                <script>
-                    $(document).ready(function() {
-                        $(".view-driver-table").click(function() {
-                            $.get('/driver/', function(data) {
-                                var tableBody = $("#driver-response-table tbody");
-                                tableBody.empty();
-                                var rows = '';
-                                $.each(data, function(index, item) {
-                                    var row = $("<tr>");
-                                    row.append($("<td>").text(item.DriverID));
-                                    row.append($("<td>").text(item.DriverName));
-                                    row.append($("<td>").text(item.LicenseNumber));
-                                    row.append($("<td>").text(item.MobileNumber));
-                                    rows += '<tr><td>' + item.DriverID + '</td><td>' + item.DriverName + '</td><td>' + item.LicenseNumber + '</td><td>' + item.MobileNumber + '</td></tr>';
-                                });
-                                $('tbody').html(rows);
-                            });
-                        });
-                    });
-                </script>
-            </tbody>
-        </table>
-    </form>
-</div>
+        });
+    </script>
 </body>
 </html>
 {% endblock content %}
