@@ -290,6 +290,11 @@ def vehicleApi(request,vehicle_id=None):
         return JsonResponse("Deleted Successfully",safe=False)
     print("API EXITEDDDD")
 
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
+
 @csrf_exempt
 def driverApi(request, driver_id=None):
     print("APIIIIII")
@@ -300,22 +305,27 @@ def driverApi(request, driver_id=None):
         
     elif request.method == 'POST':
         driver_data = JSONParser().parse(request)
-        driver_info = driver_data.get('DriverData', {})
-        address_info = driver_data.get('AddressData', {})
+        print("IIIIII",driver_data)
+       
+        driver_info = driver_data.get('DriverData')
+        print("JJJJJJ",driver_info )
+        address_data = driver_data.pop('AddressData')
+        print("kkkkk",address_data )
+       
 
-        address_serializer = AddressSerializer(data=address_info)
+        driver_serializer = DriverSerializer(data=driver_info)
+        print("LLLLLLLLLL",address_data )
+        if driver_serializer.is_valid():
+         driver_instance = driver_serializer.save()
+         print("MMMMMMMMMMMM",driver_instance )
+         print("NNNNNNNNN", address_data)
+
+        address_serializer = AddressSerializer(data=address_data)
         if address_serializer.is_valid():
-            address_instance = address_serializer.save()
-
-            driver_serializer = DriverSerializer(data=driver_info)
-            if driver_serializer.is_valid():
-                driver_serializer.save(Address=address_instance)
-                return JsonResponse({"message": "Driver and Address added successfully."}, status=201)
-            else:
-                address_instance.delete()
-                return JsonResponse(driver_serializer.errors, status=400)
-
-        return JsonResponse(address_serializer.errors, status=400)
+            address_serializer.save()
+            return JsonResponse("Added Successfully",safe=False)
+            
+        return JsonResponse("Failed to Add",safe=False)
         
     # driver_data=JSONParser().parse(request)
     # print("AAAAAAAAAAAAAAAA",driver_data)
