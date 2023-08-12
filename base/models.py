@@ -119,7 +119,6 @@ class Route(models.Model):
     
 class Driver(models.Model):
     DriverID = models.AutoField(primary_key=True)
-   # RoleID = models.ForeignKey('Role', on_delete=models.CASCADE)
     AddressID = models.ForeignKey('Address', on_delete=models.CASCADE, default=1)
     DriverName = models.CharField(max_length=100)
     MobileNumber = models.CharField(max_length=20)

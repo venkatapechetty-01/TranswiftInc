@@ -61,7 +61,7 @@
                 </div>
                 <div class="tab-pane fade" id="list-assign-vehicle-content" role="tabpanel" aria-labelledby="list-assign-vehicle">
                     <h2>Assign Vehicle</h2>
-                    <form id="assignVehicleForm" name="assignVehicle" method="post" action="vehicleApi">
+                    <form id="assignVehicleForm" name="assignVehicle">
                         {% csrf_token %}
                         <label for="vehicle">Select Vehicle:</label>
                         <select name="vehicle" required>

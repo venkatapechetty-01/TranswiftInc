@@ -291,13 +291,19 @@ def vehicleApi(request,vehicle_id=None):
         return JsonResponse("Deleted Successfully",safe=False)
     print("API EXITEDDDD")
 
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
 
+@csrf_exempt
 def driverApi(request, driver_id=None):
     print("APIIIIII")
     if request.method == 'GET':
             drivers = Driver.objects.all()
             driver_serializer = DriverSerializer(drivers, many=True)
             return JsonResponse(driver_serializer.data, safe=False)
+        
     elif request.method == 'POST':
         data = json.loads(request.body)
         print('data')
@@ -329,7 +335,7 @@ def driverApi(request, driver_id=None):
             
         return JsonResponse({'message': 'Invalid request method.'}, status=405)
         
-            #return JsonResponse({'message': 'Invalid request method.'})
+    #         #return JsonResponse({'message': 'Invalid request method.'})
     elif request.method == 'PUT':
             driver_data = JSONParser().parse(request)
             driver = Driver.objects.get(DriverID=driver_data['DriverID'])

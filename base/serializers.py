@@ -16,7 +16,7 @@ class DriverSerializer(serializers.ModelSerializer):
     class Meta:
         model=Driver 
         fields=('DriverID','AddressID','DriverName','MobileNumber', 'LicenseNumber', 'Salary')
-           
+
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model=Role 
