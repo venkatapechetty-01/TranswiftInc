@@ -46,10 +46,6 @@ If you don't have django installed for python then run:
           
 After that just install the local dependencies, run migrations, and start the server.
 
-{% endif %}
-
-# {{ project_name|title }}
-
 # Getting Started
 
 First clone the repository from Github and switch to the new directory:
