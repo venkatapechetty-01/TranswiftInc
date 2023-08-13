@@ -69,7 +69,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'v2tinc.urls'
+ROOT_URLCONF = 'TranswiftInc.urls'
 
 TEMPLATES = [
     {
@@ -87,7 +87,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'v2tinc.wsgi.application'
+WSGI_APPLICATION = 'TranswiftInc.wsgi.application'
 
 
 # Database
