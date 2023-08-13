@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+xi94k7q%d73eu7=nfrgrwl68$k2x9#c5e#_+t=@!iw2sqa^7y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'False'
+DEBUG = 'RENDER'
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -37,18 +38,11 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000'
 ]
 
-
 ALLOWED_HOSTS = ["*"]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-    
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-    ],
-}
 
 # Application definition
 
@@ -61,11 +55,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'base.apps.BaseConfig'
-    
+    'base',
 ]
-
-
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -76,10 +67,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
 ]
 
-ROOT_URLCONF = 'TranswiftInc.urls'
+ROOT_URLCONF = 'v2tinc.urls'
 
 TEMPLATES = [
     {
@@ -97,25 +87,31 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'TranswiftInc.wsgi.application'
+WSGI_APPLICATION = 'v2tinc.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-import pymysql
-pymysql.install_as_MySQLdb()
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': str(BASE_DIR / 'db.sqlite3'),
+#     }
+# }
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'TranswiftInc',
-        'USER': 'root',
-        'PASSWORD': 'TestPassword@123',
-        'HOST':'localhost',
-        'PORT':'3306',
-    }
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql',
+       'NAME': 'transwift_inc',
+       'USER': 'transwift_inc_user',
+       'PASSWORD': 'LCJaXjXFJEyrvn05WeI61Ep4YZIc6zlp',
+       'HOST': 'dpg-cjb2t18cfp5c73a5cpp0-a',
+       #'HOST': 'dpg-cjb2t18cfp5c73a5cpp0-a.oregon-postgres.render.com', #Use while connecting outside from Render
+       'PORT': '5432',
+   }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -145,7 +141,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 LOGIN_URL = 'login'
 
@@ -162,3 +158,4 @@ if 'RENDER' in os.environ:
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+django_heroku.settings(locals())
